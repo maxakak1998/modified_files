@@ -1,12 +1,11 @@
-import 'package:debounce_throttle/debounce_throttle.dart';
+import 'package:flutter/scheduler.dart';
+import 'compatible_emojis.dart';
+import 'base_emoji.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:debounce_throttle/debounce_throttle.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
-
-import 'base_emoji.dart';
-import 'compatible_emojis.dart';
 
 // typedef void _SetCategoryKey(int index, GlobalKey key);
 typedef _CategoryButtonPressed = void Function(int index);
@@ -65,10 +64,9 @@ class _EmojiKeyboardState extends State<EmojiKeyboard> {
   final contentKey = UniqueKey();
 
   List<GlobalKey> categoyKeys;
-  ValueNotifier<int> activeIndex;
+  ValueNotifier <int> activeIndex;
   ScrollController _scrollController;
   Debouncer<int> debouncer;
-
   /// Calback function when user press one of categorie in keyboard header
   /// and scroll emojis grid to the postion of that category by it's [index].
   void onCategoryClick(int index) {
@@ -79,8 +77,8 @@ class _EmojiKeyboardState extends State<EmojiKeyboard> {
   /// set the [key] of emoji category header by it's [index] in grid.
   void setCategoryKey(int index, GlobalKey key) {
     categoyKeys[index] = key;
-  }
 
+  }
   @override
   void dispose() {
     _scrollController.dispose();
@@ -88,27 +86,25 @@ class _EmojiKeyboardState extends State<EmojiKeyboard> {
     activeIndex.dispose();
     super.dispose();
   }
-
   @override
   void initState() {
     super.initState();
     _scrollController = new ScrollController();
-    debouncer = new Debouncer<int>(Duration(milliseconds: 200));
+    debouncer=new Debouncer<int>(Duration(milliseconds:200));
 
-    _scrollController.addListener(() {
-      debouncer.value = _scrollController.offset.floor();
+    _scrollController.addListener((){
+      debouncer.value=_scrollController.offset.floor();
     });
-    debouncer.values.listen((value) {
-      int i = 0;
-      for (GlobalKey key in categoyKeys) {
+    debouncer.values.listen((value){
+      int i=0;
+      for(GlobalKey key in categoyKeys){
         final RenderSliverToBoxAdapter renderBox =
-            key.currentContext.findRenderObject();
-        final int offset = _scrollController.offset.floor();
-        final sum =
-            renderBox.constraints.precedingScrollExtent.floor() - offset;
-        if (sum <= 50) {
-          if (activeIndex.value != i) {
-            activeIndex.value = i;
+        key.currentContext.findRenderObject();
+        final int offset=_scrollController.offset.floor();
+        final sum=renderBox.constraints.precedingScrollExtent.floor()-offset;
+        if(sum<=50){
+          if(activeIndex.value!=i){
+            activeIndex.value=i;
           }
         }
         i++;
@@ -136,7 +132,7 @@ class _EmojiKeyboardState extends State<EmojiKeyboard> {
                 handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
                   context,
                 ),
-                sliver: SliverPersistentHeader(
+                child: SliverPersistentHeader(
                   delegate: _EmojiKeyboardHeader(
                     activeIndex: activeIndex,
                     minExtent: _categoryHeaderHeight,
@@ -157,7 +153,7 @@ class _EmojiKeyboardState extends State<EmojiKeyboard> {
               if (snapshot.connectionState == ConnectionState.done) {
                 final List<Widget> list = List<Widget>.generate(
                   16,
-                  (index) {
+                      (index) {
                     if (index.isEven) {
                       index = (index / 2).round();
                       final key = categoyKeys[index];
@@ -202,17 +198,16 @@ class _EmojiKeyboardState extends State<EmojiKeyboard> {
                 );
                 return CustomScrollView(
                     controller: _scrollController,
-                    shrinkWrap: true,
-                    slivers: [
-                      // todo : avoid generate
-                      SliverOverlapInjector(
-                        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                          context,
-                        ),
-                      ),
-                      ...list
-                      // ignore: prefer_spread_collections
-                    ]);
+                    shrinkWrap: true, slivers: [
+                  // todo : avoid generate
+                  SliverOverlapInjector(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                      context,
+                    ),
+                  ),
+                  ...list
+                  // ignore: prefer_spread_collections
+                ]);
               } else {
                 return Center(
                   child: CircularProgressIndicator(),
@@ -229,12 +224,12 @@ class _EmojiKeyboardState extends State<EmojiKeyboard> {
 class _EmojiKeyboardHeader implements SliverPersistentHeaderDelegate {
   _EmojiKeyboardHeader(
       {key,
-      this.minExtent,
-      @required this.maxExtent,
-      @required this.categoryIcons,
-      @required this.onClick,
-      this.color = Colors.white,
-      this.activeIndex});
+        this.minExtent,
+        @required this.maxExtent,
+        @required this.categoryIcons,
+        @required this.onClick,
+        this.color = Colors.white,
+        this.activeIndex });
 
   final _CategoryButtonPressed onClick;
   final CategoryIcons categoryIcons;
@@ -243,7 +238,7 @@ class _EmojiKeyboardHeader implements SliverPersistentHeaderDelegate {
   @override
   final double maxExtent;
   final Color color;
-  final ValueNotifier<int> activeIndex;
+  final ValueNotifier <int> activeIndex;
 
   @override
   Widget build(
@@ -266,15 +261,6 @@ class _EmojiKeyboardHeader implements SliverPersistentHeaderDelegate {
 
   @override
   OverScrollHeaderStretchConfiguration get stretchConfiguration => null;
-
-  @override
-  // TODO: implement showOnScreenConfiguration
-  PersistentHeaderShowOnScreenConfiguration get showOnScreenConfiguration =>
-      throw UnimplementedError();
-
-  @override
-  // TODO: implement vsync
-  TickerProvider get vsync => throw UnimplementedError();
 }
 
 class CategoryHeader extends StatefulWidget {
@@ -285,16 +271,16 @@ class CategoryHeader extends StatefulWidget {
   @override
   final double maxExtent;
   final Color color;
-  final ValueNotifier<int> activeIndex;
+  final ValueNotifier <int> activeIndex;
 
   CategoryHeader(
       {key,
-      this.minExtent,
-      @required this.maxExtent,
-      @required this.categoryIcons,
-      @required this.onClick,
-      this.color = Colors.white,
-      this.activeIndex});
+        this.minExtent,
+        @required this.maxExtent,
+        @required this.categoryIcons,
+        @required this.onClick,
+        this.color = Colors.white,
+        this.activeIndex });
 
   @override
   _CategoryHeaderState createState() => _CategoryHeaderState();
@@ -309,7 +295,6 @@ class _CategoryHeaderState extends State<CategoryHeader> {
     });
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -320,12 +305,12 @@ class _CategoryHeaderState extends State<CategoryHeader> {
         child: Center(
           child: ValueListenableBuilder(
             valueListenable: widget.activeIndex,
-            builder: (context, value, child) {
+            builder:(context, value, child){
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: List.generate(
                   8,
-                  (index) => CupertinoButton(
+                      (index) => CupertinoButton(
                     color: widget.color,
                     pressedOpacity: 0.4,
                     padding: EdgeInsets.all(0),
@@ -336,12 +321,11 @@ class _CategoryHeaderState extends State<CategoryHeader> {
                         size: (widget.minExtent < widget.maxExtent - 10)
                             ? widget.minExtent
                             : widget.maxExtent - 10,
-                        color:
-                            _activeIndex == index ? Colors.blue : Colors.grey,
+                        color: _activeIndex == index ? Colors.blue : Colors.grey,
                       ),
                     ),
                     onPressed: () {
-                      widget.onClick(index);
+                       widget.onClick(index);
                       // setState(() {
                       //   _activeIndex = index;
                       //
@@ -399,15 +383,15 @@ class CategoryTitles {
 
   /// Get category title by it's [index]
   String operator [](int index) => <String>[
-        people,
-        nature,
-        food,
-        activity,
-        travel,
-        objects,
-        symbols,
-        flags,
-      ][index];
+    people,
+    nature,
+    food,
+    activity,
+    travel,
+    objects,
+    symbols,
+    flags,
+  ][index];
 }
 
 /// CategoryIcons class that used to define all category icons.
@@ -455,13 +439,13 @@ class CategoryIcons {
 
   /// Get category icon by it's [index]
   IconData operator [](int index) => <IconData>[
-        people,
-        nature,
-        food,
-        activity,
-        travel,
-        objects,
-        symbols,
-        flags,
-      ][index];
+    people,
+    nature,
+    food,
+    activity,
+    travel,
+    objects,
+    symbols,
+    flags,
+  ][index];
 }
