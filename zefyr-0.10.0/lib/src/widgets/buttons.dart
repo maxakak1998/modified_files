@@ -114,7 +114,7 @@ class ZefyrButton extends StatelessWidget {
         return () => _toggleAttribute(attribute, editor);
       }
     } else if (action == ZefyrToolbarAction.close) {
-      return () => toolbar.closeOverlay();
+      // return () => toolbar.closeOverlay();
     } else if (action == ZefyrToolbarAction.hideKeyboard) {
       return () => editor.hideKeyboard();
     }

@@ -117,7 +117,7 @@ class _ZefyrEditorState extends State<ZefyrEditor> {
     if (_scope.focusOwner == FocusOwner.none) {
       hideToolbar();
     } else if (!hasToolbar) {
-      showToolbar();
+      // showToolbar();
     } else {
       // TODO: is there a nicer way to do this?
       WidgetsBinding.instance.addPostFrameCallback((_) {
