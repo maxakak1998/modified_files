@@ -76,12 +76,12 @@ class ZefyrEditor extends StatefulWidget {
   ///
   /// If unset, defaults to the brightness of [ThemeData.primaryColorBrightness].
   final Brightness keyboardAppearance;
+
   @override
   _ZefyrEditorState createState() => _ZefyrEditorState();
 }
 
 class _ZefyrEditorState extends State<ZefyrEditor> {
-  double scrollOffset = 0.0;
   ZefyrImageDelegate _imageDelegate;
   ZefyrScope _scope;
   ZefyrThemeData _themeData;
@@ -117,7 +117,7 @@ class _ZefyrEditorState extends State<ZefyrEditor> {
     if (_scope.focusOwner == FocusOwner.none) {
       hideToolbar();
     } else if (!hasToolbar) {
-      // showToolbar();
+      showToolbar();
     } else {
       // TODO: is there a nicer way to do this?
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -129,7 +129,6 @@ class _ZefyrEditorState extends State<ZefyrEditor> {
   @override
   void initState() {
     super.initState();
-
     _imageDelegate = widget.imageDelegate;
   }
 
@@ -187,7 +186,6 @@ class _ZefyrEditorState extends State<ZefyrEditor> {
 
   @override
   Widget build(BuildContext context) {
-
     final ThemeData themeData = Theme.of(context);
     final Brightness keyboardAppearance =
         widget.keyboardAppearance ?? themeData.primaryColorBrightness;

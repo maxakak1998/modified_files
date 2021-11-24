@@ -106,12 +106,11 @@ class ZefyrToolbar extends StatefulWidget implements PreferredSizeWidget {
     @required this.editor,
     this.autoHide = true,
     this.delegate,
-    this.onPressHide,
   }) : super(key: key);
 
   final ZefyrToolbarDelegate delegate;
   final ZefyrScope editor;
-  final VoidCallback onPressHide;
+
   /// Whether to automatically hide this toolbar when editor loses focus.
   final bool autoHide;
 
@@ -224,8 +223,7 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
     final toolbar = ZefyrToolbarScaffold(
       key: _toolbarKey,
       body: ZefyrButtonList(buttons: _buildButtons(context)),
-        autoImplyTrailing:false,
-      trailing: null,
+      trailing: buildButton(context, ZefyrToolbarAction.hideKeyboard),
     );
 
     layers.add(toolbar);
@@ -254,10 +252,10 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
 
   List<Widget> _buildButtons(BuildContext context) {
     final buttons = <Widget>[
-      buildButton(context, ZefyrToolbarAction.close,onPressed: widget.onPressHide),
       buildButton(context, ZefyrToolbarAction.bold),
       buildButton(context, ZefyrToolbarAction.italic),
       buildButton(context, ZefyrToolbarAction.underline),
+      LinkButton(),
       buildButton(context, ZefyrToolbarAction.bulletList),
       buildButton(context, ZefyrToolbarAction.numberList),
       if (editor.imageDelegate != null) ImageButton(),
@@ -353,7 +351,7 @@ class _DefaultZefyrToolbarDelegate implements ZefyrToolbarDelegate {
     ZefyrToolbarAction.cameraImage: Icons.photo_camera,
     ZefyrToolbarAction.galleryImage: Icons.photo_library,
     ZefyrToolbarAction.hideKeyboard: Icons.keyboard_hide,
-    ZefyrToolbarAction.close: Icons.keyboard_arrow_down,
+    ZefyrToolbarAction.close: Icons.close,
     ZefyrToolbarAction.confirm: Icons.check,
   };
 
