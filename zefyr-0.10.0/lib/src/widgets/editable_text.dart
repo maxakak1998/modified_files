@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:notus/notus.dart';
+import 'package:flutter/rendering.dart';
 
 import 'code.dart';
 import 'common.dart';
@@ -223,6 +224,7 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
   //
 
   final ScrollController _scrollController = ScrollController();
+  
   ZefyrRenderContext _renderContext;
   CursorTimer _cursorTimer;
   InputConnectionController _input;
@@ -320,4 +322,5 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
       // nothing to update internally.
     });
   }
+
 }
