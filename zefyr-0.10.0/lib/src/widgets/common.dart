@@ -7,7 +7,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:notus/notus.dart';
 
-import 'controller.dart';
 import 'editable_box.dart';
 import 'horizontal_rule.dart';
 import 'image.dart';
@@ -17,12 +16,7 @@ import 'theme.dart';
 
 /// Represents single line of rich text document in Zefyr editor.
 class ZefyrLine extends StatefulWidget {
-  const ZefyrLine(
-      {Key key,
-      @required this.node,
-      this.style,
-      this.padding,
-      this.zefyrController})
+  const ZefyrLine({Key key, @required this.node, this.style, this.padding})
       : assert(node != null),
         super(key: key);
 
@@ -35,7 +29,6 @@ class ZefyrLine extends StatefulWidget {
 
   /// Padding to add around this paragraph.
   final EdgeInsets padding;
-  final ZefyrController zefyrController;
 
   @override
   _ZefyrLineState createState() => _ZefyrLineState();
@@ -43,20 +36,6 @@ class ZefyrLine extends StatefulWidget {
 
 class _ZefyrLineState extends State<ZefyrLine> {
   final LayerLink _link = LayerLink();
-  /* RegExp REGEX_EMOJI_STRING, REGEX_EMOJI;
-  Map<RegExp, TextStyle> defaultPattern = {};*/
-  @override
-  void initState() {
-    /* REGEX_EMOJI_STRING = RegExp(r":([\w-+]+):");
-    REGEX_EMOJI = RegExp(
-        r'(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])');
-    defaultPattern = {
-      REGEX_EMOJI_STRING: TextStyle(),
-      REGEX_EMOJI: TextStyle()
-    };*/
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,94 +127,11 @@ class _ZefyrLineState extends State<ZefyrLine> {
   TextSpan _segmentToTextSpan(Node node, ZefyrThemeData theme) {
     final TextNode segment = node;
     final attrs = segment.style;
-    List<TextSpan> children = [];
-    TextStyle allRegexTextStyle;
-    RegExp allRegex;
-    if (widget.zefyrController?.userName != null) {
-      widget.zefyrController
-          .updateDefaultPattern(widget.zefyrController.userName);
-      /*final key = RegExp(r"(@" + widget.zefyrController.userName + ")");
-      final value = TextStyle(color: Colors.blue);
-      defaultPattern.update(key, (value) => value, ifAbsent: () => value);*/
-    }
-    allRegex = RegExp(widget.zefyrController.defaultPattern.keys
-        .map((e) => e.pattern)
-        .join('|'));
-    /* segment.value.splitMapJoin(
-      allRegex,
-      onMatch: (Match m) {
-        if (widget.zefyrController.defaultPattern.entries.isNotEmpty) {
-          RegExp k = widget.zefyrController.defaultPattern.entries
-              .singleWhere((element) {
-            return element.key.allMatches(m[0]).isNotEmpty;
-          }).key;
-          if (k.pattern == ZefyrController.REGEX_EMOJI.pattern) {
-            return m[0];
-          } else {
-            allRegexTextStyle = widget.zefyrController.defaultPattern[k];
-          }
 
-          return m[0];
-        } else {
-          return m[0];
-        }
-      },
-
-      ///[1,3,e
-      onNonMatch: (String span) {
-        return span.toString();
-      },
-    );*/
-    segment.value.splitMapJoin(
-      allRegex,
-      onMatch: (Match m) {
-        if (widget.zefyrController.defaultPattern.entries.isNotEmpty) {
-          RegExp k = widget.zefyrController.defaultPattern.entries
-              .singleWhere((element) {
-            return element.key.allMatches(m[0]).isNotEmpty;
-          }).key;
-          if (k.pattern == ZefyrController.REGEX_EMOJI.pattern) {
-            children.add(
-              TextSpan(
-                text: m[0],
-              ),
-            );
-            return m[0];
-          } else {
-            children.add(
-              TextSpan(
-                text: m[0],
-                style: widget.zefyrController.defaultPattern[k],
-              ),
-            );
-          }
-
-          return m[0];
-        } else {
-          children.add(
-            TextSpan(text: m[0]),
-          );
-          return m[0];
-        }
-      },
-
-      ///[1,3,e
-      onNonMatch: (String span) {
-        children.add(TextSpan(text: span, style: _getTextStyle(attrs, theme)));
-        return span.toString();
-      },
-    );
-    /*return TextSpan(
+    return TextSpan(
       text: segment.value,
-      style: allRegexTextStyle != null
-          ? allRegexTextStyle
-          : _getTextStyle(attrs, theme),
-    );*/
-    if (children == null || children.isEmpty) {
-      return TextSpan(style: _getTextStyle(attrs, theme), text: segment.value);
-    } else {
-      return TextSpan(style: _getTextStyle(attrs, theme), children: children);
-    }
+      style: _getTextStyle(attrs, theme),
+    );
   }
 
   TextStyle _getTextStyle(NotusStyle style, ZefyrThemeData theme) {
@@ -246,7 +142,7 @@ class _ZefyrLineState extends State<ZefyrLine> {
     if (style.containsSame(NotusAttribute.italic)) {
       result = result.merge(theme.attributeTheme.italic);
     }
-    if (style.containsSame(NotusAttribute.underline)) {
+    if (style.containsSame(NotusAttribute.underline)){
       result = result.merge(theme.attributeTheme.underline);
     }
     if (style.contains(NotusAttribute.link)) {

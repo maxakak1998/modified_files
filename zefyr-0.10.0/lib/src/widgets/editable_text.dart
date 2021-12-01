@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:notus/notus.dart';
 import 'package:flutter/rendering.dart';
-
 import 'code.dart';
 import 'common.dart';
 import 'controller.dart';
@@ -224,7 +223,6 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
   //
 
   final ScrollController _scrollController = ScrollController();
-
   ZefyrRenderContext _renderContext;
   CursorTimer _cursorTimer;
   InputConnectionController _input;
@@ -241,20 +239,11 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
   Widget _defaultChildBuilder(BuildContext context, Node node) {
     if (node is LineNode) {
       if (node.hasEmbed) {
-        return ZefyrLine(
-          node: node,
-          zefyrController: widget.controller,
-        );
+        return ZefyrLine(node: node);
       } else if (node.style.contains(NotusAttribute.heading)) {
-        return ZefyrHeading(
-          node: node,
-          zefyrController: widget.controller,
-        );
+        return ZefyrHeading(node: node);
       }
-      return ZefyrParagraph(
-        node: node,
-        zefyrController: widget.controller,
-      );
+      return ZefyrParagraph(node: node);
     }
 
     final BlockNode block = node;
@@ -262,15 +251,9 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
     if (blockStyle == NotusAttribute.block.code) {
       return ZefyrCode(node: block);
     } else if (blockStyle == NotusAttribute.block.bulletList) {
-      return ZefyrList(
-        node: block,
-        zefyrController: widget.controller,
-      );
+      return ZefyrList(node: block);
     } else if (blockStyle == NotusAttribute.block.numberList) {
-      return ZefyrList(
-        node: block,
-        zefyrController: widget.controller,
-      );
+      return ZefyrList(node: block);
     } else if (blockStyle == NotusAttribute.block.quote) {
       return ZefyrQuote(node: block);
     }

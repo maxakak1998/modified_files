@@ -224,7 +224,7 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
     final toolbar = ZefyrToolbarScaffold(
       key: _toolbarKey,
       body: ZefyrButtonList(buttons: _buildButtons(context)),
-        autoImplyTrailing:false,
+      autoImplyTrailing:false,
       trailing: null,
     );
 

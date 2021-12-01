@@ -7,7 +7,6 @@ import 'package:flutter/widgets.dart';
 import 'package:notus/notus.dart';
 import 'package:quill_delta/quill_delta.dart';
 import 'package:zefyr/util.dart';
-import 'package:flutter/material.dart';
 
 const TextSelection _kZeroSelection = TextSelection.collapsed(
   offset: 0,
@@ -39,7 +38,6 @@ class ZefyrController extends ChangeNotifier {
   /// Currently selected text within the [document].
   TextSelection get selection => _selection;
   TextSelection _selection = _kZeroSelection;
-  String userName;
 
   ChangeSource _lastChangeSource;
 
@@ -51,21 +49,6 @@ class ZefyrController extends ChangeNotifier {
   /// It gets reseted after each format action within the [document].
   NotusStyle get toggledStyles => _toggledStyles;
   NotusStyle _toggledStyles = NotusStyle();
-  static RegExp REGEX_EMOJI_STRING = RegExp(r":([\w-+]+):");
-  static RegExp REGEX_EMOJI = RegExp(
-      r'(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])');
-
-  Map<RegExp, TextStyle> defaultPattern = {
-    REGEX_EMOJI_STRING: TextStyle(),
-    REGEX_EMOJI: TextStyle()
-  };
-  void updateDefaultPattern(String userName) {
-    if (userName != null) {
-      final key = RegExp(r"(@" + userName + ")");
-      final value = TextStyle(color: Colors.blue);
-      defaultPattern.update(key, (value) => value, ifAbsent: () => value);
-    }
-  }
 
   /// Updates selection with specified [value].
   ///
