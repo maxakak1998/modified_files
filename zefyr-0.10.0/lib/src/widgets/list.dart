@@ -4,15 +4,18 @@
 import 'package:flutter/material.dart';
 import 'package:notus/notus.dart';
 
+import '../../zefyr.dart';
 import 'common.dart';
 import 'paragraph.dart';
 import 'theme.dart';
 
 /// Represents number lists and bullet lists in a Zefyr editor.
 class ZefyrList extends StatelessWidget {
-  const ZefyrList({Key key, @required this.node}) : super(key: key);
+  const ZefyrList({Key key, @required this.node, this.zefyrController})
+      : super(key: key);
 
   final BlockNode node;
+  final ZefyrController zefyrController;
 
   @override
   Widget build(BuildContext context) {
@@ -39,16 +42,19 @@ class ZefyrList extends StatelessWidget {
 
   Widget _buildItem(Node node, int index) {
     LineNode line = node;
-    return ZefyrListItem(index: index, node: line);
+    return ZefyrListItem(
+        index: index, node: line, zefyrController: zefyrController);
   }
 }
 
 /// An item in a [ZefyrList].
 class ZefyrListItem extends StatelessWidget {
-  ZefyrListItem({Key key, this.index, this.node}) : super(key: key);
+  ZefyrListItem({Key key, this.index, this.node, this.zefyrController})
+      : super(key: key);
 
   final int index;
   final LineNode node;
+  final ZefyrController zefyrController;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +65,7 @@ class ZefyrListItem extends StatelessWidget {
         ? theme.attributeTheme.bulletList
         : theme.attributeTheme.numberList;
     final bulletText =
-        (style == NotusAttribute.block.bulletList) ? '•' : '$index.';
+    (style == NotusAttribute.block.bulletList) ? '•' : '$index.';
 
     TextStyle textStyle;
     Widget content;
@@ -73,15 +79,15 @@ class ZefyrListItem extends StatelessWidget {
     } else {
       textStyle = theme.defaultLineTheme.textStyle;
       content = ZefyrLine(
-        node: node,
-        style: textStyle,
-        padding: blockTheme.linePadding,
-      );
+          node: node,
+          style: textStyle,
+          padding: blockTheme.linePadding,
+          zefyrController: zefyrController);
       padding = blockTheme.linePadding;
     }
 
     Widget bullet =
-        SizedBox(width: 24.0, child: Text(bulletText, style: textStyle));
+    SizedBox(width: 24.0, child: Text(bulletText, style: textStyle));
     if (padding != null) {
       bullet = Padding(padding: padding, child: bullet);
     }
