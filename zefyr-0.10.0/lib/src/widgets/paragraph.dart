@@ -4,16 +4,19 @@
 import 'package:flutter/material.dart';
 import 'package:notus/notus.dart';
 
+import '../../zefyr.dart';
 import 'common.dart';
 import 'theme.dart';
 
 /// Represents regular paragraph line in a Zefyr editor.
 class ZefyrParagraph extends StatelessWidget {
-  ZefyrParagraph({Key key, @required this.node, this.blockStyle})
+  ZefyrParagraph(
+      {Key key, @required this.node, this.blockStyle, this.zefyrController})
       : super(key: key);
 
   final LineNode node;
   final TextStyle blockStyle;
+  final ZefyrController zefyrController;
 
   @override
   Widget build(BuildContext context) {
@@ -23,21 +26,23 @@ class ZefyrParagraph extends StatelessWidget {
       style = style.merge(blockStyle);
     }
     return ZefyrLine(
-      node: node,
-      style: style,
-      padding: theme.defaultLineTheme.padding,
-    );
+        node: node,
+        style: style,
+        padding: theme.defaultLineTheme.padding,
+        zefyrController: zefyrController);
   }
 }
 
 /// Represents heading-styled line in [ZefyrEditor].
 class ZefyrHeading extends StatelessWidget {
-  ZefyrHeading({Key key, @required this.node, this.blockStyle})
+  ZefyrHeading(
+      {Key key, @required this.node, this.blockStyle, this.zefyrController})
       : assert(node.style.contains(NotusAttribute.heading)),
         super(key: key);
 
   final LineNode node;
   final TextStyle blockStyle;
+  final ZefyrController zefyrController;
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +52,10 @@ class ZefyrHeading extends StatelessWidget {
       style = style.merge(blockStyle);
     }
     return ZefyrLine(
-      node: node,
-      style: style,
-      padding: theme.padding,
-    );
+        node: node,
+        style: style,
+        padding: theme.padding,
+        zefyrController: zefyrController);
   }
 
   static LineTheme themeOf(LineNode node, BuildContext context) {
