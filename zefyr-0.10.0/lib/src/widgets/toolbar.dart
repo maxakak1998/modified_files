@@ -107,11 +107,15 @@ class ZefyrToolbar extends StatefulWidget implements PreferredSizeWidget {
     this.autoHide = true,
     this.delegate,
     this.onPressHide,
+    this.sendButtonWidget,
+
   }) : super(key: key);
 
   final ZefyrToolbarDelegate delegate;
   final ZefyrScope editor;
   final VoidCallback onPressHide;
+  final Widget sendButtonWidget;
+
   /// Whether to automatically hide this toolbar when editor loses focus.
   final bool autoHide;
 
@@ -224,8 +228,10 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
     final toolbar = ZefyrToolbarScaffold(
       key: _toolbarKey,
       body: ZefyrButtonList(buttons: _buildButtons(context)),
-      autoImplyTrailing:false,
-      trailing: null,
+      autoImplyTrailing: widget.sendButtonWidget == null ? true : false,
+      trailing: widget.sendButtonWidget != null
+          ? widget.sendButtonWidget
+          : buildButton(context, ZefyrToolbarAction.hideKeyboard),
     );
 
     layers.add(toolbar);
@@ -253,15 +259,26 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
   }
 
   List<Widget> _buildButtons(BuildContext context) {
-    final buttons = <Widget>[
-      buildButton(context, ZefyrToolbarAction.close,onPressed: widget.onPressHide),
-      buildButton(context, ZefyrToolbarAction.bold),
-      buildButton(context, ZefyrToolbarAction.italic),
-      buildButton(context, ZefyrToolbarAction.underline),
-      buildButton(context, ZefyrToolbarAction.bulletList),
-      buildButton(context, ZefyrToolbarAction.numberList),
-      if (editor.imageDelegate != null) ImageButton(),
-    ];
+    final buttons = <Widget>[];
+    if(widget.sendButtonWidget!=null)
+    {
+      buttons.add(  buildButton(context, ZefyrToolbarAction.close,onPressed: widget.onPressHide));
+      buttons.add( buildButton(context, ZefyrToolbarAction.bold));
+      buttons.add( buildButton(context, ZefyrToolbarAction.italic));
+      buttons.add( buildButton(context, ZefyrToolbarAction.bulletList));
+      buttons.add(  buildButton(context, ZefyrToolbarAction.numberList));
+      buttons.add(  buildButton(context, ZefyrToolbarAction.quote));
+    }
+    else{
+      buttons.add( buildButton(context, ZefyrToolbarAction.bold));
+      buttons.add(  buildButton(context, ZefyrToolbarAction.italic));
+      buttons.add(    buildButton(context, ZefyrToolbarAction.underline));
+      buttons.add(  LinkButton());
+      buttons.add(   buildButton(context, ZefyrToolbarAction.bulletList));
+      buttons.add(   buildButton(context, ZefyrToolbarAction.numberList));
+      if (editor.imageDelegate != null)  buttons.add( ImageButton());
+
+    }
     return buttons;
   }
 }
