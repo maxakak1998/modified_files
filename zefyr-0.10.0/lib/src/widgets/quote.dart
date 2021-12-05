@@ -3,15 +3,16 @@
 // BSD-style license that can be found in the LICENSE file.
 import 'package:flutter/material.dart';
 import 'package:notus/notus.dart';
-
+import '../../zefyr.dart';
 import 'paragraph.dart';
 import 'theme.dart';
 
 /// Represents a quote block in a Zefyr editor.
 class ZefyrQuote extends StatelessWidget {
-  const ZefyrQuote({Key key, @required this.node}) : super(key: key);
+  const ZefyrQuote({Key key, @required this.node, this.zefyrController}) : super(key: key);
 
   final BlockNode node;
+  final ZefyrController zefyrController;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class ZefyrQuote extends StatelessWidget {
     if (line.style.contains(NotusAttribute.heading)) {
       content = ZefyrHeading(node: line, blockStyle: blockStyle);
     } else {
-      content = ZefyrParagraph(node: line, blockStyle: blockStyle);
+      content = ZefyrParagraph(node: line, blockStyle: blockStyle, zefyrController: zefyrController);
     }
 
     final row = Row(children: <Widget>[Expanded(child: content)]);

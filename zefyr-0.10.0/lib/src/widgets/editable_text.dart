@@ -272,7 +272,8 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
         zefyrController: widget.controller,
       );
     } else if (blockStyle == NotusAttribute.block.quote) {
-      return ZefyrQuote(node: block);
+      return ZefyrQuote(node: block    ,    zefyrController: widget.controller,
+      );
     }
 
     throw UnimplementedError('Block format $blockStyle.');
