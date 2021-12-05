@@ -59,6 +59,11 @@ class ZefyrController extends ChangeNotifier {
     REGEX_EMOJI_STRING: TextStyle(),
     REGEX_EMOJI: TextStyle()
   };
+  void updateDocument(NotusDocument document){
+    _document=document;
+    notifyListeners();
+
+  }
   void updateDefaultPattern(String userName) {
     if (userName != null) {
       final key = RegExp(r"(@" + userName + ")");
