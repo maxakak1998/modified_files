@@ -21,6 +21,8 @@ class ZefyrEditor extends StatefulWidget {
     @required this.controller,
     @required this.focusNode,
     this.autofocus = true,
+    this.showToolbar = true,
+
     this.mode = ZefyrMode.edit,
     this.padding = const EdgeInsets.symmetric(horizontal: 16.0),
     this.toolbarDelegate,
@@ -46,7 +48,8 @@ class ZefyrEditor extends StatefulWidget {
   /// Otherwise, the keyboard is only shown after the user taps the text field.
   ///
   /// Defaults to true. Cannot be null.
-  final bool autofocus;
+  final bool autofocus,showToolbar;
+
 
   /// Editing mode of this editor.
   final ZefyrMode mode;
@@ -117,7 +120,8 @@ class _ZefyrEditorState extends State<ZefyrEditor> {
     if (_scope.focusOwner == FocusOwner.none) {
       hideToolbar();
     } else if (!hasToolbar) {
-      // showToolbar();
+      if(widget.showToolbar)
+      {showToolbar();}
     } else {
       // TODO: is there a nicer way to do this?
       WidgetsBinding.instance.addPostFrameCallback((_) {
