@@ -105,6 +105,8 @@ class ZefyrToolbar extends StatefulWidget implements PreferredSizeWidget {
     Key key,
     @required this.editor,
     this.autoHide = true,
+    this.isChatUI = false,
+
     this.delegate,
     this.onPressHide,
     this.sendButtonWidget,
@@ -115,6 +117,7 @@ class ZefyrToolbar extends StatefulWidget implements PreferredSizeWidget {
   final ZefyrScope editor;
   final VoidCallback onPressHide;
   final Widget sendButtonWidget;
+  final bool isChatUI;
 
   /// Whether to automatically hide this toolbar when editor loses focus.
   final bool autoHide;
@@ -228,8 +231,7 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
     final toolbar = ZefyrToolbarScaffold(
       key: _toolbarKey,
       body: ZefyrButtonList(buttons: _buildButtons(context)),
-      autoImplyTrailing: widget.sendButtonWidget == null ? true : false,
-      trailing: widget.sendButtonWidget != null
+      trailing:widget.isChatUI
           ? widget.sendButtonWidget
           : buildButton(context, ZefyrToolbarAction.hideKeyboard),
     );
@@ -260,7 +262,7 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
 
   List<Widget> _buildButtons(BuildContext context) {
     final buttons = <Widget>[];
-    if(widget.sendButtonWidget!=null)
+    if(widget.isChatUI)
     {
       buttons.add(  buildButton(context, ZefyrToolbarAction.close,onPressed: widget.onPressHide));
       buttons.add( buildButton(context, ZefyrToolbarAction.bold));
