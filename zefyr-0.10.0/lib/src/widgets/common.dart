@@ -19,10 +19,10 @@ import 'theme.dart';
 class ZefyrLine extends StatefulWidget {
   const ZefyrLine(
       {Key key,
-        @required this.node,
-        this.style,
-        this.padding,
-        this.zefyrController})
+      @required this.node,
+      this.style,
+      this.padding,
+      this.zefyrController})
       : assert(node != null),
         super(key: key);
 
@@ -251,6 +251,9 @@ class _ZefyrLineState extends State<ZefyrLine> {
     }
     if (style.contains(NotusAttribute.link)) {
       result = result.merge(theme.attributeTheme.link);
+    }
+    if (style.contains(NotusAttribute.strikeThrough)) {
+      result = result.merge(theme.attributeTheme.strikeThrough);
     }
     return result;
   }

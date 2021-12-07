@@ -34,12 +34,14 @@ enum ZefyrToolbarAction {
   hideKeyboard,
   close,
   confirm,
-  underline
+  underline,
+  strikeThrough
 }
 
 final kZefyrToolbarAttributeActions = <ZefyrToolbarAction, NotusAttributeKey>{
   ZefyrToolbarAction.bold: NotusAttribute.bold,
   ZefyrToolbarAction.italic: NotusAttribute.italic,
+  ZefyrToolbarAction.strikeThrough: NotusAttribute.strikeThrough,
   ZefyrToolbarAction.link: NotusAttribute.link,
   ZefyrToolbarAction.heading: NotusAttribute.heading,
   ZefyrToolbarAction.headingLevel1: NotusAttribute.heading.level1,
@@ -106,11 +108,9 @@ class ZefyrToolbar extends StatefulWidget implements PreferredSizeWidget {
     @required this.editor,
     this.autoHide = true,
     this.isChatUI = false,
-
     this.delegate,
     this.onPressHide,
     this.sendButtonWidget,
-
   }) : super(key: key);
 
   final ZefyrToolbarDelegate delegate;
@@ -231,7 +231,7 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
     final toolbar = ZefyrToolbarScaffold(
       key: _toolbarKey,
       body: ZefyrButtonList(buttons: _buildButtons(context)),
-      trailing:widget.isChatUI
+      trailing: widget.isChatUI
           ? widget.sendButtonWidget
           : buildButton(context, ZefyrToolbarAction.hideKeyboard),
     );
@@ -262,24 +262,23 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
 
   List<Widget> _buildButtons(BuildContext context) {
     final buttons = <Widget>[];
-    if(widget.isChatUI)
-    {
-      buttons.add(  buildButton(context, ZefyrToolbarAction.close,onPressed: widget.onPressHide));
-      buttons.add( buildButton(context, ZefyrToolbarAction.bold));
-      buttons.add( buildButton(context, ZefyrToolbarAction.italic));
-      buttons.add( buildButton(context, ZefyrToolbarAction.bulletList));
-      buttons.add(  buildButton(context, ZefyrToolbarAction.numberList));
-      buttons.add(  buildButton(context, ZefyrToolbarAction.quote));
-    }
-    else{
-      buttons.add( buildButton(context, ZefyrToolbarAction.bold));
-      buttons.add(  buildButton(context, ZefyrToolbarAction.italic));
-      buttons.add(    buildButton(context, ZefyrToolbarAction.underline));
-      buttons.add(  LinkButton());
-      buttons.add(   buildButton(context, ZefyrToolbarAction.bulletList));
-      buttons.add(   buildButton(context, ZefyrToolbarAction.numberList));
-      if (editor.imageDelegate != null)  buttons.add( ImageButton());
-
+    if (widget.isChatUI) {
+      buttons.add(buildButton(context, ZefyrToolbarAction.close,
+          onPressed: widget.onPressHide));
+      buttons.add(buildButton(context, ZefyrToolbarAction.bold));
+      buttons.add(buildButton(context, ZefyrToolbarAction.italic));
+      buttons.add(buildButton(context, ZefyrToolbarAction.strikeThrough));
+      buttons.add(buildButton(context, ZefyrToolbarAction.bulletList));
+      buttons.add(buildButton(context, ZefyrToolbarAction.numberList));
+      buttons.add(buildButton(context, ZefyrToolbarAction.quote));
+    } else {
+      buttons.add(buildButton(context, ZefyrToolbarAction.bold));
+      buttons.add(buildButton(context, ZefyrToolbarAction.italic));
+      buttons.add(buildButton(context, ZefyrToolbarAction.underline));
+      buttons.add(LinkButton());
+      buttons.add(buildButton(context, ZefyrToolbarAction.bulletList));
+      buttons.add(buildButton(context, ZefyrToolbarAction.numberList));
+      if (editor.imageDelegate != null) buttons.add(ImageButton());
     }
     return buttons;
   }
@@ -357,6 +356,7 @@ class _DefaultZefyrToolbarDelegate implements ZefyrToolbarDelegate {
   static const kDefaultButtonIcons = {
     ZefyrToolbarAction.bold: Icons.format_bold,
     ZefyrToolbarAction.italic: Icons.format_italic,
+    ZefyrToolbarAction.strikeThrough: Icons.strikethrough_s,
     ZefyrToolbarAction.link: Icons.link,
     ZefyrToolbarAction.underline: Icons.format_underlined,
     ZefyrToolbarAction.unlink: Icons.link_off,

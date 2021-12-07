@@ -288,6 +288,9 @@ class AttributeTheme {
   /// Style used to render "italic" text.
   final TextStyle italic;
 
+  /// Style used to render "strike through" text.
+  final TextStyle strikeThrough;
+
   /// Style used to render text containing links.
   final TextStyle link;
 
@@ -319,6 +322,7 @@ class AttributeTheme {
   AttributeTheme({
     this.bold,
     this.italic,
+    this.strikeThrough,
     this.underline,
     this.link,
     this.heading1,
@@ -351,6 +355,7 @@ class AttributeTheme {
     return AttributeTheme(
       bold: TextStyle(fontWeight: FontWeight.bold),
       italic: TextStyle(fontStyle: FontStyle.italic),
+      strikeThrough: TextStyle(decoration: TextDecoration.lineThrough),
       underline: TextStyle(decoration: TextDecoration.underline),
       link: TextStyle(
         decoration: TextDecoration.underline,
@@ -417,6 +422,7 @@ class AttributeTheme {
   AttributeTheme copyWith({
     TextStyle bold,
     TextStyle italic,
+    TextStyle strikeThrough,
     TextStyle underline,
     TextStyle link,
     LineTheme heading1,
@@ -430,6 +436,7 @@ class AttributeTheme {
     return AttributeTheme(
       bold: bold ?? this.bold,
       italic: italic ?? this.italic,
+      strikeThrough: strikeThrough ?? this.strikeThrough,
       underline: underline ?? this.underline,
       link: link ?? this.link,
       heading1: heading1 ?? this.heading1,
@@ -449,6 +456,8 @@ class AttributeTheme {
     return copyWith(
       bold: bold?.merge(other.bold) ?? other.bold,
       italic: italic?.merge(other.italic) ?? other.italic,
+      strikeThrough:
+          strikeThrough?.merge(other.strikeThrough) ?? other.strikeThrough,
       underline: underline?.merge(other.underline) ?? other.underline,
       link: link?.merge(other.link) ?? other.link,
       heading1: heading1?.merge(other.heading1) ?? other.heading1,
@@ -467,6 +476,7 @@ class AttributeTheme {
     final AttributeTheme otherTheme = other;
     return (otherTheme.bold == bold) &&
         (otherTheme.italic == italic) &&
+        (otherTheme.strikeThrough == strikeThrough) &&
         (otherTheme.underline == underline) &&
         (otherTheme.link == link) &&
         (otherTheme.heading1 == heading1) &&
@@ -483,6 +493,7 @@ class AttributeTheme {
     return hashList([
       bold,
       italic,
+      strikeThrough,
       underline,
       link,
       heading1,

@@ -21,6 +21,7 @@ class _NotusHtmlEncoder extends Converter<Delta, String> {
   static const kBold = 'strong';
   static const kItalic = 'em';
   static const kUnderline = 'u';
+  static const kStrikeThrough = 'strike';
   static final kSimpleBlocks = <NotusAttribute, String>{
     NotusAttribute.bq: 'blockquote',
     NotusAttribute.ul: 'ul',
@@ -186,11 +187,13 @@ class _NotusHtmlEncoder extends Converter<Delta, String> {
       {bool close = false}) {
     if (attribute == NotusAttribute.bold) {
       _writeBoldTag(buffer, close: close);
+    } else if (attribute == NotusAttribute.strikeThrough) {
+      _writeStrikeThroughTag(buffer, close: close);
     } else if (attribute == NotusAttribute.italic) {
       _writeItalicTag(buffer, close: close);
-    } else if (attribute == NotusAttribute.underline){
+    } else if (attribute == NotusAttribute.underline) {
       _writeUnderlineTag(buffer, close: close);
-    }else if (attribute.key == NotusAttribute.link.key) {
+    } else if (attribute.key == NotusAttribute.link.key) {
       _writeLinkTag(buffer, attribute as NotusAttribute<String>, close: close);
     } else if (attribute.key == NotusAttribute.heading.key) {
       _writeHeadingTag(buffer, attribute as NotusAttribute<int>, close: close);
@@ -205,6 +208,10 @@ class _NotusHtmlEncoder extends Converter<Delta, String> {
 
   void _writeBoldTag(StringBuffer buffer, {bool close = false}) {
     buffer.write(!close ? "<$kBold>" : "</$kBold>");
+  }
+
+  void _writeStrikeThroughTag(StringBuffer buffer, {bool close = false}) {
+    buffer.write(!close ? "<$kStrikeThrough>" : "</$kStrikeThrough>");
   }
 
   void _writeItalicTag(StringBuffer buffer, {bool close = false}) {
@@ -375,7 +382,10 @@ class _NotusHtmlDecoder extends Converter<String, Delta> {
       if (element.localName == "strong") {
         attributes["b"] = true;
       }
-      if(element.localName == "u"){
+      if (element.localName == "strike") {
+        attributes["del"] = true;
+      }
+      if (element.localName == "u") {
         attributes["u"] = true;
       }
       if (element.localName == "a") {
@@ -419,6 +429,7 @@ class _NotusHtmlDecoder extends Converter<String, Delta> {
     "div": "block",
     "em": "inline",
     "strong": "inline",
+    "strike": "inline",
     "a": "inline",
     "u": "inline",
     "p": "inline",

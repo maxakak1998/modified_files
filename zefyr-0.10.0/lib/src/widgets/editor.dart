@@ -28,6 +28,8 @@ class ZefyrEditor extends StatefulWidget {
     this.toolbarDelegate,
     this.imageDelegate,
     this.selectionControls,
+    this.scrollController,
+
     this.physics,
     this.keyboardAppearance,
   })  : assert(mode != null),
@@ -40,6 +42,7 @@ class ZefyrEditor extends StatefulWidget {
 
   /// Controls whether this editor has keyboard focus.
   final FocusNode focusNode;
+  final  ScrollController scrollController;
 
   /// Whether this editor should focus itself if nothing else is already
   /// focused.
@@ -198,7 +201,8 @@ class _ZefyrEditorState extends State<ZefyrEditor> {
       controller: _scope.controller,
       focusNode: _scope.focusNode,
       imageDelegate: _scope.imageDelegate,
-      selectionControls: widget.selectionControls,
+      selectionControls: widget.selectionControls,      scrollController: widget.scrollController,
+
       autofocus: widget.autofocus,
       mode: widget.mode,
       padding: widget.padding,

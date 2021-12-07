@@ -41,6 +41,8 @@ class ZefyrEditableText extends StatefulWidget {
     this.mode = ZefyrMode.edit,
     this.padding = const EdgeInsets.symmetric(horizontal: 16.0),
     this.physics,
+    this.scrollController,
+
     this.keyboardAppearance = Brightness.light,
   })  : assert(mode != null),
         assert(controller != null),
@@ -54,6 +56,7 @@ class ZefyrEditableText extends StatefulWidget {
   /// Controls whether this editor has keyboard focus.
   final FocusNode focusNode;
   final ZefyrImageDelegate imageDelegate;
+  final  ScrollController scrollController;
 
   /// Whether this text field should focus itself if nothing else is already
   /// focused.
@@ -173,6 +176,8 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
     super.initState();
     _focusAttachment = _focusNode.attach(context);
     _input = InputConnectionController(_handleRemoteValueChange);
+    widget.scrollController..addListener(scrollManager);
+
     _updateSubscriptions();
   }
 
@@ -224,6 +229,7 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
   //
 
   final ScrollController _scrollController = ScrollController();
+  double scrollOffset = 0.0;
 
   ZefyrRenderContext _renderContext;
   CursorTimer _cursorTimer;
@@ -272,13 +278,33 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
         zefyrController: widget.controller,
       );
     } else if (blockStyle == NotusAttribute.block.quote) {
-      return ZefyrQuote(node: block    ,    zefyrController: widget.controller,
+      return ZefyrQuote(
+        node: block,
+        zefyrController: widget.controller,
       );
     }
 
     throw UnimplementedError('Block format $blockStyle.');
   }
+  void scrollManager() {
+    final scrollDirection = widget.scrollController.position.userScrollDirection;
+    final currentOffset = widget.scrollController.offset;
+    final maxOffset = widget.scrollController.position.maxScrollExtent;
 
+    if (scrollDirection == ScrollDirection.idle &&
+        widget.controller.selection.isCollapsed) {
+      if (_isAtEnd()) {
+        widget.scrollController.jumpTo(maxOffset);
+      } else {
+        widget.scrollController.jumpTo(scrollOffset);
+      }
+    } else {
+      scrollOffset = currentOffset;
+    }
+  }
+  bool _isAtEnd() {
+    return widget.controller.document.length - 1 == widget.controller.selection.end;
+  }
   void _updateSubscriptions([ZefyrEditableText oldWidget]) {
     if (oldWidget == null) {
       widget.controller.addListener(_handleLocalValueChange);

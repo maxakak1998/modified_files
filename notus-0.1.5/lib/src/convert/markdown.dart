@@ -21,6 +21,7 @@ class NotusMarkdownCodec extends Codec<Delta, String> {
 class _NotusMarkdownEncoder extends Converter<Delta, String> {
   static const kBold = '**';
   static const kItalic = '_';
+  static const kStrikeThrough = '~~';
   static final kSimpleBlocks = <NotusAttribute, String>{
     NotusAttribute.bq: '> ',
     NotusAttribute.ul: '* ',
@@ -160,9 +161,11 @@ class _NotusMarkdownEncoder extends Converter<Delta, String> {
       {bool close = false}) {
     if (attribute == NotusAttribute.bold) {
       _writeBoldTag(buffer);
+    } else if (attribute == NotusAttribute.strikeThrough) {
+      _writeStrikeThroughTag(buffer);
     } else if (attribute == NotusAttribute.italic) {
       _writeItalicTag(buffer);
-    } else if (attribute == NotusAttribute.underline){
+    } else if (attribute == NotusAttribute.underline) {
       _writeUnderlineTag(buffer);
     } else if (attribute.key == NotusAttribute.link.key) {
       _writeLinkTag(buffer, attribute as NotusAttribute<String>, close: close);
@@ -177,6 +180,10 @@ class _NotusMarkdownEncoder extends Converter<Delta, String> {
 
   void _writeBoldTag(StringBuffer buffer) {
     buffer.write(kBold);
+  }
+
+  void _writeStrikeThroughTag(StringBuffer buffer) {
+    buffer.write(kStrikeThrough);
   }
 
   void _writeItalicTag(StringBuffer buffer) {

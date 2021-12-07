@@ -56,6 +56,7 @@ class ZefyrThemeData {
   final TextStyle boldStyle;
   final TextStyle italicStyle;
   final TextStyle linkStyle;
+  final TextStyle strikeStyle;
   final StyleTheme paragraphTheme;
   final HeadingTheme headingTheme;
   final BlockTheme blockTheme;
@@ -76,6 +77,7 @@ class ZefyrThemeData {
     const padding = EdgeInsets.symmetric(vertical: 8.0);
     final boldStyle = TextStyle(fontWeight: FontWeight.bold);
     final italicStyle = TextStyle(fontStyle: FontStyle.italic);
+    final strikeStyle = TextStyle(decoration: TextDecoration.lineThrough);
     final linkStyle = TextStyle(
         color: themeData.accentColor, decoration: TextDecoration.underline);
 
@@ -83,6 +85,7 @@ class ZefyrThemeData {
       boldStyle: boldStyle,
       italicStyle: italicStyle,
       linkStyle: linkStyle,
+      strikeStyle: strikeStyle,
       paragraphTheme: StyleTheme(textStyle: paragraphStyle, padding: padding),
       headingTheme: HeadingTheme.fallback(context),
       blockTheme: BlockTheme.fallback(context),
@@ -96,6 +99,7 @@ class ZefyrThemeData {
   const ZefyrThemeData({
     this.boldStyle,
     this.italicStyle,
+    this.strikeStyle,
     this.linkStyle,
     this.paragraphTheme,
     this.headingTheme,
@@ -111,6 +115,7 @@ class ZefyrThemeData {
     TextStyle boldStyle,
     TextStyle italicStyle,
     TextStyle linkStyle,
+    TextStyle strikeStyle,
     StyleTheme paragraphTheme,
     HeadingTheme headingTheme,
     BlockTheme blockTheme,
@@ -122,6 +127,7 @@ class ZefyrThemeData {
     return ZefyrThemeData(
       boldStyle: boldStyle ?? this.boldStyle,
       italicStyle: italicStyle ?? this.italicStyle,
+      strikeStyle: strikeStyle ?? this.strikeStyle,
       linkStyle: linkStyle ?? this.linkStyle,
       paragraphTheme: paragraphTheme ?? this.paragraphTheme,
       headingTheme: headingTheme ?? this.headingTheme,
@@ -137,6 +143,7 @@ class ZefyrThemeData {
     return copyWith(
       boldStyle: other.boldStyle,
       italicStyle: other.italicStyle,
+      strikeStyle: other.strikeStyle,
       linkStyle: other.linkStyle,
       paragraphTheme: other.paragraphTheme,
       headingTheme: other.headingTheme,
