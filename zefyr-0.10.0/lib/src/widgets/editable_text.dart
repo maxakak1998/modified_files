@@ -158,7 +158,8 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
 
     body = SingleChildScrollView(
       physics: widget.physics,
-      controller: _scrollController,
+      controller:widget.scrollController,
+      ,
       child: body,
     );
 
