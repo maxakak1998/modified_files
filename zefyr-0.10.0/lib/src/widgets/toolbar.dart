@@ -82,7 +82,7 @@ class ZefyrToolbarScaffold extends StatelessWidget {
     final theme = ZefyrTheme.of(context).toolbarTheme;
     final toolbar = ZefyrToolbar.of(context);
     final constraints =
-        BoxConstraints.tightFor(height: ZefyrToolbar.kToolbarHeight);
+    BoxConstraints.tightFor(height: ZefyrToolbar.kToolbarHeight);
     final children = <Widget>[
       Expanded(child: body),
     ];
@@ -124,7 +124,7 @@ class ZefyrToolbar extends StatefulWidget implements PreferredSizeWidget {
 
   static ZefyrToolbarState of(BuildContext context) {
     final _ZefyrToolbarScope scope =
-        context.dependOnInheritedWidgetOfExactType<_ZefyrToolbarScope>();
+    context.dependOnInheritedWidgetOfExactType<_ZefyrToolbarScope>();
     return scope?.toolbar;
   }
 
@@ -250,7 +250,7 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
     }
 
     final constraints =
-        BoxConstraints.tightFor(height: ZefyrToolbar.kToolbarHeight);
+    BoxConstraints.tightFor(height: ZefyrToolbar.kToolbarHeight);
     return _ZefyrToolbarScope(
       toolbar: this,
       child: Container(
@@ -327,17 +327,17 @@ class _ZefyrButtonListState extends State<ZefyrButtonList> {
         : null;
     return Row(
       children: <Widget>[
-        SizedBox(
-          width: 12.0,
-          height: ZefyrToolbar.kToolbarHeight,
-          child: Container(child: leftArrow, color: theme.color),
-        ),
+        // SizedBox(
+        //   width: 12.0,
+        //   height: ZefyrToolbar.kToolbarHeight,
+        //   child: Container(child: leftArrow, color: theme.color),
+        // ),
         Expanded(child: ClipRect(child: list)),
-        SizedBox(
-          width: 12.0,
-          height: ZefyrToolbar.kToolbarHeight,
-          child: Container(child: rightArrow, color: theme.color),
-        ),
+        // SizedBox(
+        //   width: 12.0,
+        //   height: ZefyrToolbar.kToolbarHeight,
+        //   child: Container(child: rightArrow, color: theme.color),
+        // ),
       ],
     );
   }
@@ -372,7 +372,7 @@ class _DefaultZefyrToolbarDelegate implements ZefyrToolbarDelegate {
     ZefyrToolbarAction.cameraImage: Icons.photo_camera,
     ZefyrToolbarAction.galleryImage: Icons.photo_library,
     ZefyrToolbarAction.hideKeyboard: Icons.keyboard_hide,
-    ZefyrToolbarAction.close: Icons.keyboard_arrow_down,
+    ZefyrToolbarAction.close: Icons.cancel,
     ZefyrToolbarAction.confirm: Icons.check,
   };
 
