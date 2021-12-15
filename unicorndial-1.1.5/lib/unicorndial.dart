@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
+import 'dart:ui';
 
 class UnicornOrientation {
   static const HORIZONTAL = 0;
@@ -119,6 +120,9 @@ class _UnicornDialer extends State<UnicornDialer>
   }
 
   void mainActionButtonOnPressed() {
+    if (widget.onMainButtonPressed != null) {
+      widget.onMainButtonPressed();
+    }
     if (this._animationController.isDismissed) {
       this._animationController.forward();
     } else {
@@ -163,9 +167,6 @@ class _UnicornDialer extends State<UnicornDialer>
                   backgroundColor: widget.parentButtonBackground,
                   onPressed: () {
                     mainActionButtonOnPressed();
-                    if (widget.onMainButtonPressed != null) {
-                      widget.onMainButtonPressed();
-                    }
                   },
                   child: !hasChildButtons
                       ? widget.parentButton
@@ -287,11 +288,18 @@ class _UnicornDialer extends State<UnicornDialer>
           alignment: FractionalOffset.center,
           child: GestureDetector(
               onTap: mainActionButtonOnPressed,
-              child: Container(
-                color: widget.backgroundColor,
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-              )));
+              child:
+              BackdropFilter
+                (
+                  filter: ImageFilter.blur(
+                    sigmaX: 5.0,
+                    sigmaY: 5.0,
+                  ),
+                  child: Container(
+                    color: widget.backgroundColor,
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                  ))));
 
       return widget.hasBackground
           ? Stack(
