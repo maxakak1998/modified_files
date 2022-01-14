@@ -1,6 +1,8 @@
 // Copyright (c) 2018, the Zefyr project authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -42,7 +44,8 @@ class ZefyrEditableText extends StatefulWidget {
     this.padding = const EdgeInsets.symmetric(horizontal: 16.0),
     this.physics,
     this.scrollController,
-
+    this.hintText,
+    this.hintTextStyle,
     this.keyboardAppearance = Brightness.light,
   })  : assert(mode != null),
         assert(controller != null),
@@ -56,7 +59,9 @@ class ZefyrEditableText extends StatefulWidget {
   /// Controls whether this editor has keyboard focus.
   final FocusNode focusNode;
   final ZefyrImageDelegate imageDelegate;
-  final  ScrollController scrollController;
+  final ScrollController scrollController;
+  final String hintText;
+  final TextStyle hintTextStyle;
 
   /// Whether this text field should focus itself if nothing else is already
   /// focused.
@@ -106,6 +111,7 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
 
   FocusNode _focusNode;
   FocusAttachment _focusAttachment;
+  bool isShowHint = true;
 
   /// Express interest in interacting with the keyboard.
   ///
@@ -145,6 +151,7 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
   //
   // Overridden members of State
   //
+  StreamController<bool> _showHintStream;
 
   @override
   Widget build(BuildContext context) {
@@ -158,11 +165,26 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
 
     body = SingleChildScrollView(
       physics: widget.physics,
-      controller:widget.scrollController,
+      controller: widget.scrollController,
       child: body,
     );
-
-    final layers = <Widget>[body];
+    Widget d = StreamBuilder<bool>(
+      stream: _showHintStream.stream,
+      builder: (context, snapshot) {
+        final isShow =
+            !snapshot.hasData || (snapshot.data != null && snapshot.data);
+        return isShow
+            ? Container(
+                margin: EdgeInsets.only(left: 8, top: 6),
+                child: Text(
+                  widget.hintText ?? 'Hints',
+                  style: widget.hintTextStyle,
+                ),
+              )
+            : SizedBox();
+      },
+    );
+    final layers = <Widget>[d, body];
     layers.add(ZefyrSelectionOverlay(
       controls: widget.selectionControls ?? defaultSelectionControls(context),
     ));
@@ -173,11 +195,22 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
   @override
   void initState() {
     _focusNode = widget.focusNode;
+    _showHintStream = StreamController.broadcast();
+
     super.initState();
     _focusAttachment = _focusNode.attach(context);
     _input = InputConnectionController(_handleRemoteValueChange);
     widget.scrollController..addListener(scrollManager);
-
+    widget.controller
+      ..addListener(() {
+        if (widget.controller.document.toPlainText() == '\n') {
+          isShowHint = true;
+          _showHintStream.add(isShowHint);
+        } else {
+          isShowHint = false;
+          _showHintStream.add(isShowHint);
+        }
+      });
     _updateSubscriptions();
   }
 
@@ -286,8 +319,10 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
 
     throw UnimplementedError('Block format $blockStyle.');
   }
+
   void scrollManager() {
-    final scrollDirection = widget.scrollController.position.userScrollDirection;
+    final scrollDirection =
+        widget.scrollController.position.userScrollDirection;
     final currentOffset = widget.scrollController.offset;
     final maxOffset = widget.scrollController.position.maxScrollExtent;
 
@@ -302,9 +337,12 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
       scrollOffset = currentOffset;
     }
   }
+
   bool _isAtEnd() {
-    return widget.controller.document.length - 1 == widget.controller.selection.end;
+    return widget.controller.document.length - 1 ==
+        widget.controller.selection.end;
   }
+
   void _updateSubscriptions([ZefyrEditableText oldWidget]) {
     if (oldWidget == null) {
       widget.controller.addListener(_handleLocalValueChange);

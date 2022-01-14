@@ -22,14 +22,14 @@ class ZefyrEditor extends StatefulWidget {
     @required this.focusNode,
     this.autofocus = true,
     this.showToolbar = true,
-
     this.mode = ZefyrMode.edit,
     this.padding = const EdgeInsets.symmetric(horizontal: 16.0),
     this.toolbarDelegate,
     this.imageDelegate,
     this.selectionControls,
     this.scrollController,
-
+    this.hintText,
+    this.hintTextStyle,
     this.physics,
     this.keyboardAppearance,
   })  : assert(mode != null),
@@ -42,7 +42,7 @@ class ZefyrEditor extends StatefulWidget {
 
   /// Controls whether this editor has keyboard focus.
   final FocusNode focusNode;
-  final  ScrollController scrollController;
+  final ScrollController scrollController;
 
   /// Whether this editor should focus itself if nothing else is already
   /// focused.
@@ -51,8 +51,7 @@ class ZefyrEditor extends StatefulWidget {
   /// Otherwise, the keyboard is only shown after the user taps the text field.
   ///
   /// Defaults to true. Cannot be null.
-  final bool autofocus,showToolbar;
-
+  final bool autofocus, showToolbar;
 
   /// Editing mode of this editor.
   final ZefyrMode mode;
@@ -83,6 +82,8 @@ class ZefyrEditor extends StatefulWidget {
   /// If unset, defaults to the brightness of [ThemeData.primaryColorBrightness].
   final Brightness keyboardAppearance;
 
+  final String hintText;
+  final TextStyle hintTextStyle;
   @override
   _ZefyrEditorState createState() => _ZefyrEditorState();
 }
@@ -123,8 +124,9 @@ class _ZefyrEditorState extends State<ZefyrEditor> {
     if (_scope.focusOwner == FocusOwner.none) {
       hideToolbar();
     } else if (!hasToolbar) {
-      if(widget.showToolbar)
-      {showToolbar();}
+      if (widget.showToolbar) {
+        showToolbar();
+      }
     } else {
       // TODO: is there a nicer way to do this?
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -201,12 +203,14 @@ class _ZefyrEditorState extends State<ZefyrEditor> {
       controller: _scope.controller,
       focusNode: _scope.focusNode,
       imageDelegate: _scope.imageDelegate,
-      selectionControls: widget.selectionControls,      scrollController: widget.scrollController,
-
+      selectionControls: widget.selectionControls,
+      scrollController: widget.scrollController,
       autofocus: widget.autofocus,
       mode: widget.mode,
       padding: widget.padding,
       physics: widget.physics,
+      hintText: widget.hintText,
+      hintTextStyle: widget.hintTextStyle,
       keyboardAppearance: keyboardAppearance,
     );
 
