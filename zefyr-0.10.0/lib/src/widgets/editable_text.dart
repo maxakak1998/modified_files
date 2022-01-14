@@ -175,7 +175,7 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
             !snapshot.hasData || (snapshot.data != null && snapshot.data);
         return isShow
             ? Container(
-                margin: EdgeInsets.only(left: 8, top: 6),
+                margin: EdgeInsets.only(left: 14, top: 6),
                 child: Text(
                   widget.hintText ?? 'Hints',
                   style: widget.hintTextStyle,
