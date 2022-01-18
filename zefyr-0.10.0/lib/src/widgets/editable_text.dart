@@ -171,17 +171,17 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
     Widget d = StreamBuilder<bool>(
       stream: _showHintStream.stream,
       builder: (context, snapshot) {
-        final isShow =
-            !snapshot.hasData || (snapshot.data != null && snapshot.data);
-        return isShow
-            ? Container(
-                margin: EdgeInsets.only(left: 14, top: 6),
-                child: Text(
-                  widget.hintText ?? 'Hints',
-                  style: widget.hintTextStyle,
-                ),
-              )
-            : SizedBox();
+        final isShow =widget.controller.document.toPlainText()=='\n'?true:false;
+        return Visibility (
+          visible: isShow,
+          child:  Container(
+            margin: EdgeInsets.only(left: 16, top: 6),
+            child: Text(
+              widget.hintText ?? 'Hints',
+              style: widget.hintTextStyle,
+            ),
+          ),)
+        ;
       },
     );
     final layers = <Widget>[d, body];
@@ -203,13 +203,7 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
     widget.scrollController..addListener(scrollManager);
     widget.controller
       ..addListener(() {
-        if (widget.controller.document.toPlainText() == '\n') {
-          isShowHint = true;
-          _showHintStream.add(isShowHint);
-        } else {
-          isShowHint = false;
-          _showHintStream.add(isShowHint);
-        }
+        _showHintStream.add(isShowHint);
       });
     _updateSubscriptions();
   }
