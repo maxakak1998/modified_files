@@ -383,7 +383,8 @@ class _NotusHtmlDecoder extends Converter<String, Delta> {
         attributes["b"] = true;
       }
       if (element.localName == "strike") {
-        attributes["del"] = true;
+        attributes["strike"] = true;
+
       }
       if (element.localName == "u") {
         attributes["u"] = true;
