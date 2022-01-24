@@ -177,7 +177,7 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
           child:  Container(
             margin: EdgeInsets.only(left: 16, top: 6),
             child: Text(
-              widget.hintText ?? 'Hints',
+              widget.hintText ?? '',
               style: widget.hintTextStyle,
             ),
           ),)
