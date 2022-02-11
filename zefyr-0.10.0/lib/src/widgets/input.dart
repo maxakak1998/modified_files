@@ -157,6 +157,10 @@ class InputConnectionController implements TextInputClient {
       rethrow;
     }
   }
+  @override
+  // TODO: implement currentTextEditingValue
+  TextEditingValue get currentTextEditingValue =>
+      _lastKnownRemoteTextEditingValue;
 
   //
   // Private members
