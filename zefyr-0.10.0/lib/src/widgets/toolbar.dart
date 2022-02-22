@@ -230,7 +230,7 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
     // new state each time we toggle overlay.
     final toolbar = ZefyrToolbarScaffold(
       key: _toolbarKey,
-      body: ZefyrButtonList(buttons: _buildButtons(context)),
+      body: ZefyrButtonList(buttons: _buildButtons(context),key:new UniqueKey(),),
       trailing: widget.isChatUI
           ? widget.sendButtonWidget
           : buildButton(context, ZefyrToolbarAction.hideKeyboard),
