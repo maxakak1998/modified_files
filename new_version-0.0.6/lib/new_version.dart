@@ -123,19 +123,69 @@ class NewVersion {
 
   /// Android info is fetched by parsing the html of the app store page.
   _getAndroidStoreVersion(String id, VersionStatus versionStatus) async {
-    final url = 'https://play.google.com/store/apps/details?id=$id';
+    String storeVersion = '0.0.0';
+    final url = 'https://play.google.com/store/apps/details?id=$id&gl=us';
+
+    try{
+      final response = await http.get(url);
+      if (response.statusCode != 200) {
+        print('Can\'t find an app in the Play Store with the id: $id');
+        return null;
+      }
+      final document = parse(response.body);
+      /*final elements = document.getElementsByClassName('hAyfc');
+    final versionElement = elements.firstWhere(
+      (elm) => elm.querySelector('.BgcNfc').text == 'Current Version',
+    );
+    versionStatus.storeVersion = versionElement.querySelector('.htlgb').text;*/
+
+      final additionalInfoElements = document.getElementsByClassName('hAyfc');
+      if (additionalInfoElements.isNotEmpty) {
+        final versionElement = additionalInfoElements.firstWhere(
+                (elm) => elm.querySelector('.BgcNfc').text == 'Current Version',
+            orElse: () => null);
+        if (versionElement != null) {
+          storeVersion = versionElement.querySelector('.htlgb').text;
+        }
+      } else {
+        final scriptElements = document.getElementsByTagName('script');
+        final infoScriptElement = scriptElements.firstWhere(
+              (elm) => elm.text.contains('key: \'ds:4\''),
+        );
+
+        final param = infoScriptElement.text
+            .substring(20, infoScriptElement.text.length - 2)
+            .replaceAll('key:', '"key":')
+            .replaceAll('hash:', '"hash":')
+            .replaceAll('data:', '"data":')
+            .replaceAll('sideChannel:', '"sideChannel":')
+            .replaceAll('\'', '"')
+            .replaceAll('owners\"', 'owners');
+        final parsed = json.decode(param);
+        final data = parsed['data'];
+
+        storeVersion = data[1][2][140][0][0][0];
+      }
+      versionStatus.appStoreLink = url;
+      versionStatus.storeVersion = storeVersion;
+      return versionStatus;
+    }catch(e){
+      versionStatus.appStoreLink = url;
+      versionStatus.storeVersion = storeVersion;
+      return versionStatus;
+    }
+    /*  final url = 'https://play.google.com/store/apps/details?id=$id&gl=us';
     final response = await http.get(url);
     if (response.statusCode != 200) {
       print('Can\'t find an app in the Play Store with the id: $id');
       return null;
     }
     final document = parse(response.body);
-    /*final elements = document.getElementsByClassName('hAyfc');
+    *//*final elements = document.getElementsByClassName('hAyfc');
     final versionElement = elements.firstWhere(
       (elm) => elm.querySelector('.BgcNfc').text == 'Current Version',
     );
-    versionStatus.storeVersion = versionElement.querySelector('.htlgb').text;*/
-    String storeVersion = '0.0.0';
+    versionStatus.storeVersion = versionElement.querySelector('.htlgb').text;*//*
 
     final additionalInfoElements = document.getElementsByClassName('hAyfc');
     if (additionalInfoElements.isNotEmpty) {
@@ -163,11 +213,11 @@ class NewVersion {
       final data = parsed['data'];
 
       storeVersion = data[1][2][140][0][0][0];
-    }
+    }*/
 
-    versionStatus.appStoreLink = url;
-    versionStatus.storeVersion = storeVersion;
-    return versionStatus;
+    // versionStatus.appStoreLink = url;
+    // versionStatus.storeVersion = storeVersion;
+    // return versionStatus;
   }
 
   /// Shows the user a platform-specific alert about the app update. The user
