@@ -235,9 +235,11 @@ class _ZefyrSelectionOverlayState extends State<ZefyrSelectionOverlay>
     _longPressPosition = _lastTapDownPosition;
     _lastTapDownPosition = null;
   }
-
   void _handleTap() {
     assert(_lastTapDownPosition != null);
+    if (isToolbarVisible) {
+      hideToolbar();
+    }
     final globalPoint = _lastTapDownPosition;
     _lastTapDownPosition = null;
     HitTestResult result = HitTestResult();
@@ -274,6 +276,13 @@ class _ZefyrSelectionOverlayState extends State<ZefyrSelectionOverlay>
     HitTestResult result = HitTestResult();
     WidgetsBinding.instance.hitTest(result, globalPoint);
     final box = _getEditableBox(result);
+    if (isToolbarVisible) {
+      hideToolbar();
+    } else {
+      showToolbar();
+      _didCaretTap = false;
+
+    }
     if (box == null) {
       return;
     }
